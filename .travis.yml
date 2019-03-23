@@ -1,0 +1,54 @@
+language: node_js
+node_js:
+  - "8"
+dist: xenial
+
+sudo: false
+
+branches:
+  only:
+    - master
+
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
+before_install:
+  - npm install -g @angular/cli
+
+install:
+  - npm install
+
+jobs:
+  include:
+    - stage: test
+      script: npm run $COMMAND
+      name: Test
+      env: COMMAND="test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox"
+
+    - script: npm run $COMMAND
+      name: Lint
+      env: COMMAND=lint
+
+    - stage: buld
+      script: ng build $BUILD
+      name: Build
+      env: BUILD="--prod --base-href https://techgeekd.github.io/angular-ssr/"
+
+    - stage: deploy
+      script: skip
+      name: Deploy
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: dist
+        on:
+          branch: master
+
+cache:
+  directories:
+    - node_modules
