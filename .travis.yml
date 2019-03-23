@@ -53,3 +53,15 @@ cache:
   directories:
     - node_modules
 
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: ItSUhrYvq48iQOCCCD5sQSgv6y1rrbG1VyfmYfVYIlvfTnfzjoQC4Ob5YLe7FcxNDIWY3LOb0lQoF5tWG8eq61tol9BlbM0jlJeQimRKFIoPIZYsnhFFo9JgRqWI1TPmcUaHNmZ+4vs4EBAliCr7DqTvKXdJwqCrOFPG73ilMlyzpkfVO4VxUjCPaFq0ZGQ4G1zBKKp3nYjoMmuNCJy9R83PUAMwVwo2L8xg4oV7pY+Ky/Wh8dmz766/mxdRaWQNLFGP9RnGFYpC5VYdqW2WLh31BWsZcFczTfQ/RQp+QVi9sdzHWMThstRf2pYB3EgVD/dKm8CIZS8egy0DquDXpT5bsh4pzA3aQyr/r2c9v1Q7eBtuXty6Yb42U/oYPwaGVvgsjzl00Y+WahQ51yBdJ14QY0UKIB4S9Q5Nn+mVumQPmb0h7Gskg3NeIic210iKmd6ltpLwhSFpDKovF/ZzshfirRKyYmNvx4FjGWDIl+TE+54mX3H6wKgBMoW5b4UxsNcNWtsyF8fB6rBrP8y0kEBKunGMSlnM2pJSGnxx4Y2XMwMflEbtVXXuZ2jp/bwxaET4jeu2JdVnnSNcKz/V9/K+6hHsva1X4o8RwUGKpO45SVyaKyfeVWSSkCWKC/ZftvSQnp06jk3vvZSNZWTSZrXP99d9dsibv/plqE8drmg=
+    on_success: always
+    on_failure: always
+    on_start: always
+    template:
+      - "Repo `%{repository_slug}` *%{result}* build (<%{build_url}|#%{build_number}>) for commit (<%{compare_url}|%{commit}>) on branch `%{branch}`."
+      - "Execution time: *%{duration}*"
+      - "Message: %{message}"
