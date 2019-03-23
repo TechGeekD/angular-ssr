@@ -31,24 +31,25 @@ jobs:
 
     - script: npm run $COMMAND
       name: Lint
+      install: skip
       env: COMMAND=lint
 
-    - stage: buld
-      script: ng build $BUILD
+    - stage: build
+      script:
+        - ng build $BUILD
+        - mv dist/angular-ssr/index.html dist/angular-ssr/404.html
       name: Build
-      env: BUILD="--prod --base-href https://techgeekd.github.io/angular-ssr/"
-
-    - stage: deploy
-      script: skip
-      name: Deploy
+      env: BUILD="--prod --base-href /angular-ssr/"
       deploy:
         provider: pages
         skip_cleanup: true
-        github_token: $GITHUB_TOKEN
-        local_dir: dist
+        github_token: "$GITHUB_TOKEN"
+        local_dir: dist/angular-ssr/
         on:
           branch: master
-
+          # all_branches: true
+          # condition: "$TRAVIS_BRANCH =~ ^master|ANSSR-2$"
 cache:
   directories:
     - node_modules
+
