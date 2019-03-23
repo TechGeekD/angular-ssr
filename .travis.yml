@@ -2,57 +2,49 @@ language: node_js
 node_js:
   - "8"
 dist: xenial
-
 sudo: false
-
 branches:
   only:
     - master
-
+    - "ANSSR-4"
 addons:
   apt:
     sources:
       - google-chrome
     packages:
       - google-chrome-stable
-
 before_install:
   - npm install -g @angular/cli
-
 install:
   - npm install
-
 jobs:
   include:
     - stage: test
       script: npm run $COMMAND
       name: Test
       env: COMMAND="test -- --watch=false --no-progress --browsers=ChromeHeadlessNoSandbox"
-
     - script: npm run $COMMAND
       name: Lint
       install: skip
       env: COMMAND=lint
-
     - stage: build
       script:
         - ng build $BUILD
-        - mv dist/angular-ssr/index.html dist/angular-ssr/404.html
+        # - mv dist/browser/index.html dist/browser/404.html
       name: Build
       env: BUILD="--prod --base-href /angular-ssr/"
       deploy:
-        provider: pages
-        skip_cleanup: true
-        github_token: "$GITHUB_TOKEN"
-        local_dir: dist/angular-ssr/
+        provider: heroku
+        api_key:
+          secure: tO7QvcsyO86x0DCHj/YhCSIYjdMbIoMotfmC/d8r0c+bfJE7kGl/k2nNbN4aYmSSzuP1zKnJQyKkireYKlP5BH8PgUbIvsYtFhZO2R7WLoAQmx8kn2p/Aojh+Zx03JFPawThl56x1LSZ6+rp2TKpdZDAnJBJs+ZEYOWoKk+7u6xRrabfk6MplMq/DZO51STdSjVF0w+JZ50/oOfBfiT94RUFcUwydL0iRoUB6bastG5U2YytBGQIwRI71Xiem/1MtLAUg0/1MxgPpNuN/Yd364maEVu5ofV7YLieZYWVEEd/nNC/3nQoNnri+fdAN5Bssfnc7Xit/gNBM8vV8kfAGEQwoPdYoLmeI3rCgqRR7AmpP4TgQiaFNGOcSOZDlh22rcCJFzjrK94zZakQR+jvFGl+geuqKMIOVN6CpLxkDo/5YgL7uEoPJaq1YEegVSSMxrc/3LT/vhkwrmIibN6JkrOzOixsAnRz14iw+ebL3tY9OdW7JRuL5vK4SxEAD9rX3TpzeYAvpNvYT6z+2ADzgSivF6rzlQOQjyW3xM+a6c3NkzHaR+5vtX421KA5QmDlNb5BZEW6PtPrp7EqqOWUtYeXhUNFz07CkEjWecdzYY49S5jStiC/AUthgznq25JJZpPAZqUIs7+osyclg0gEP/Sa9dosugoXRpCPYxzU06s=
+        app: angular-ssr-1
         on:
-          branch: master
-          # all_branches: true
-          # condition: "$TRAVIS_BRANCH =~ ^master|ANSSR-2$"
+          # branch: master
+          all-branch: true
+          condition: "$TRAVIS_BRANCH =~ ^master|ANSSR-4$"
 cache:
   directories:
     - node_modules
-
 notifications:
   email: false
   slack:
@@ -62,6 +54,7 @@ notifications:
     on_failure: always
     on_start: always
     template:
-      - "Repo `%{repository_slug}` *%{result}* build (<%{build_url}|#%{build_number}>) for commit (<%{compare_url}|%{commit}>) on branch `%{branch}`."
+      - Repo `%{repository_slug}` *%{result}* build (<%{build_url}|#%{build_number}>)
+        for commit (<%{compare_url}|%{commit}>) on branch `%{branch}`.
       - "Execution time: *%{duration}*"
       - "Message: %{message}"
