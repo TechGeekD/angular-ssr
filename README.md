@@ -1,6 +1,8 @@
-# AngularSsr
+# AngularSsr [![Build Status](https://travis-ci.org/TechGeekD/angular-ssr.svg?branch=master)](https://travis-ci.org/TechGeekD/angular-ssr)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
+
+## SSR Deployed @[Heroku](https://angular-ssr-1.herokuapp.com/)
 
 ## Development server
 
